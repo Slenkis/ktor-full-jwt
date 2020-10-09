@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    letter-spacing: 1px;
+    background-color: #234265;
+    font-family: "Calibri", sans-serif;
+}
+
+.form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border-radius: 15px;
+}
+
+.form h1 {
+    margin: 30px 100px;
+    padding: 0;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+}
+
+.form-input {
+    margin: 15px 40px;
+    text-align: center;
+}
+
+.form-input input {
+    padding: 12px;
+    min-width: 300px;
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    background-color: rgba(21, 20, 20, 0.3);
+    outline: none;
+    border: 1px solid #cdcccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: .1s;
+}
+
+.form-input input::placeholder {
+    color: rgba(219, 219, 219, 0.7);
+}
+
+.form-input input:focus {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.form-input input[type="submit"] {
+    letter-spacing: 1.1pt;
+    margin-top: 10px;
+    border: 1px solid transparent;
+}
+
+.form-input input[type="submit"]:enabled {
+    /*color: #ffffff;*/
+    color: #111010;
+    border-color: transparent;
+    background-color: rgb(216, 226, 248);
+}
+
+.form-input input[type="submit"]:enabled:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: rgb(147, 121, 207);
+    transition: .1s;
+}
+
+.form-input input[type="submit"]:disabled {
+    color: rgba(255, 255, 255, .2);
+    border-color: transparent;
+    background-color: rgba(62, 55, 55, 0.2);
+}
+
+.forgot {
+    display: block;
+    text-align: center;
+}
+
+.forgot a {
+    color: white;
+    text-decoration: none;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
+}

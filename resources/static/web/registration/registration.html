@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="registration.css">
+    <link rel="stylesheet" href="../common-auth.css">
+
+    <link rel="stylesheet" href="/styles/registration.css">
+    <link rel="stylesheet" href="/styles/common-auth.css">
+</head>
+<body>
+
+<div class="form">
+    <h1>Регистрация</h1>
+
+    <div class="form-input">
+        <input onkeyup="manage(this)" type="text" placeholder="Имя пользователя">
+    </div>
+    <div class="form-input">
+        <input type="email" placeholder="Электронная почта">
+    </div>
+    <div class="form-input">
+        <input type="password" placeholder="Пароль">
+    </div>
+    <div class="form-input">
+        <input type="password" placeholder="Повторить пароль">
+    </div>
+    <div class="form-input">
+        <input type="submit" disabled value="Зарегистрироваться" onclick="register()">
+    </div>
+
+    <div class="forgot">
+        <a href="/login">Уже есть аккаунт?</a>
+    </div>
+
+</div>
+
+<script>
+    const inputs = document.querySelectorAll(".form-input input")
+    const submit = inputs[4]
+
+    function manage(text) {
+        if (text.value.trim() === '')
+            submit.disabled = true
+        else submit.disabled = false
+    }
+
+    async function register() {
+
+        // submit.disabled = true
+
+        const name = inputs[0].value
+        const email = inputs[1].value
+        const password = inputs[2].value
+        const confirm_password = inputs[3].value
+
+        console.log({
+            "name": name,
+            "email": email,
+            "password": password,
+            "confirm": confirm_password
+        })
+
+        // const url = '/api/registration'; // auth url
+        // const data = {username: userName, email: userEmail, password: password};  // json body
+        //
+        // try {
+        //     const response = await fetch(url, {
+        //         method: 'POST',
+        //         body: JSON.stringify(data),
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        //     const json = await response.json();
+        //     console.log('Успех:', json);
+        // } catch (error) {
+        //     console.error('Ошибка:', error);
+        // }
+    }
+</script>
+</body>
+</html>
