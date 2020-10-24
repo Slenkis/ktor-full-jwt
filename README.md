@@ -1,60 +1,147 @@
 # ktor-full-jwt
 
-## 👏 О чём этот проект? 
-Проект создан как пример полноценной реализации JWT аутентефикации с помощью Ktor и Exposed.
+# 📖 About 
+The project was created as an example of a full-fledged implementation JWT authentication with [Ktor](https://ktor.io/) & [Exposed](https://github.com/JetBrains/Exposed).
 
-## 🙊 Что умеет?
-✔️Аутентефикация пользователя через API по логину и паролю.  
-✔️Выдача refresh и access токенов. Их обновление.  
-✖️Страницы входа и регистрации в процессе, скоро будет пример по фронту.
+# ⭐ Capabilities
+✔ User authentication via API by the login and password.  
+✔ Issuance of refresh and access tokens.  
+✔ Updating refresh tokens.  
+✖ Login and registration pages coming soon.
 
-## 🏁 Что нужно для старта?
+# 🚀 What need to start?
 - Ktor  
 - Exposed  
-- База данных (PostgreSQL)  
+- Jackson  
+- Database (PostgreSQL)  
 - BCrypt  
 
-1. Клонируем репозиторий: 
+1. Clone repository: 
 `git clone https://github.com/Slenkis/ktor-full-jwt.git`
 
-2. Создаем 2 таблицы в БД: **refresh_tokens** и **users**  
-![Таблицы](https://imgur.com/2SRHjyr.jpg)
+2. Create 2 tables in the database: **refresh_tokens** & **users**  
+![Tables](https://imgur.com/2SRHjyr.jpg)
 
-3. В [application.conf](resources/application.conf) указываем данные от БД
+3. Change credentials for connecting to database in [application.conf](resources/application.conf)
 
-4. Запускам проект: 
+4. Run project: 
 `./gradlew run`
 
-## 🗿 Как пользоваться?
+# 🍒 Usage
+1. Send login request to `/api/login` with **email** and **password** in body.
 
-1. Отправляем на `/api/login` json-запрос:
+2. Send a request to `/users` with the **access** token in the *Authorization* header.
+
+3. When the **access** token lifetime expires, you need to get a new pair by sending a request to `/api/auth/refresh`, in the body of which specify the current **refresh** token.
+
+# ✨ API
+
+## 🔑 Login
+Used to collect tokens for a registered user.
+
+**URL** : `/api/login/`  
+
+**Method** : `POST`  
+
+**Data example** :
 ```json
 {
-    "email": "example@gmail.com",
+    "email": "bob@gmail.com",
     "password": "qwerty123"
 }
 ```
 
-2. Если пользователь есть в БД, то в ответ получаем пару токенов:
+### Success response
+**Code** : `200 OK`
+
+**Content example** :
 ```json
 {
     "accessToken": "XXXXXX.YYYYYY.ZZZZZZ",
     "refreshToken": "d19e6fcd-ee18-4b38-acae-d1f7b9109118"
 }
 ```
+### Error response
 
-3. Выполняем запросы к нужным URL, предоставляя **access-токен** в заголовке *Authorization*:  
-```Authorization: Bearer XXXXXX.YYYYYY.ZZZZZZ```
+**Code** : `401 Unauthorized`
 
-4. При истечении срока жизни **access-токена** необходимо получить новую пару *(её пример находится в пункте 2)*, отправив запрос на `/api/refresh`, в теле которого указать **refresh-токен**:
+**Condition** : If 'email' and 'password' combination is wrong.
+
+## 🔁 Refresh
+**URL** : `/api/refresh/`  
+
+**Method** : `POST`
+
+**Data example** :
 ```json
 {
     "refreshToken": "d19e6fcd-ee18-4b38-acae-d1f7b9109118"
 }
 ```
 
-## ⚡ Есть замечания или предложения?
-Можно оформить [Issue](../../issues) или связаться со мной в [Telegram](https://t.me/slenkis)
+### Success response
+**Code** : `200 OK`
 
-## 📄 Лицензия
-Проект имеет лицензию Apache 2.0, подробности в [LICENSE](LICENSE)
+**Content example** :
+```json
+{
+    "accessToken": "KKKKKK.NNNNNN.DDDDDD",
+    "refreshToken": "b1349089-8f71-464f-a0fa-f2675252693e"
+}
+```
+
+### Error response
+
+**Code** : `400 Bad Request`
+
+**Condition** : If the refresh token is invalid or expired.
+
+**Content example** :
+```json
+{
+    "description": "invalid token"
+}
+```
+
+## 👥 Get users
+Get all users from the database 'users'
+
+**URL** : `/users/`  
+
+**Method** : `GET`
+
+**Auth required** : `Yes, in header`
+
+### Success response
+**Code** : `200 OK`
+
+**Content example** :
+```json
+[    
+    {
+        "id": 1,
+        "email": "bob@gmail.com",
+        "password": "$2y$08$W62OarwjrPeu1n23FgEXhev2ZncUWMNwD5hF3QZ195PGZB1HkD3Zu",
+        "active": true
+    },
+    {
+        "id": 2,
+        "email": "alice@yahoo.com",
+        "password": "$2y$08$1eSVekbH33kkkUWMhfJC4uJV21oWxsZMPssojXJo6O0TyS5p9kIFG",
+        "active": false
+    }
+]
+```
+
+### Error response
+
+**Code** : `401 Unauthorized`
+
+**Condition** : If the access token is invalid or expired.
+
+# 🤝 Contributing
+Pull requests are welcome. For major changes, please open an [issue](../../issues) first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+# 📝 License
+Project is licensing under [Apache-2.0](LICENSE)

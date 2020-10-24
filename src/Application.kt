@@ -135,7 +135,15 @@ fun Application.module() {
 
                 call.respond(tokenPair)
             } else
-                call.respond(HttpStatusCode.BadRequest, "Invalid token")
+                call.respondText(
+                    """
+                    { 
+                        "description": "invalid token"
+                    }
+                    """.trimIndent(),
+                    ContentType.parse("application/json"),
+                    HttpStatusCode.BadRequest
+                )
         }
 
         /** - **/
