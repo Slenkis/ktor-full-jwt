@@ -1,147 +1,55 @@
-# ktor-full-jwt
+# JWT authentication (access and refresh tokens) in Ktor
 
-# 📖 About 
-The project was created as an example of a full-fledged implementation JWT authentication with [Ktor](https://ktor.io/) & [Exposed](https://github.com/JetBrains/Exposed).
+This project was created as an example of a full-fledged implementation of JWT(with access and refresh tokens) in Ktor.
+Project contains registration by credentials, JWT authentication, refreshing expired token and auth-provided endpoints.
 
-# ⭐ Capabilities
-✔ User authentication via API by the login and password.  
-✔ Issuance of refresh and access tokens.  
-✔ Updating refresh tokens.  
-✖ Login and registration pages coming soon.
+## Capabilities
+* User authentication by the email and password;  
+* JSON forms validation;  
+* Registration of users;  
+* Issuing a pair of a refresh and access tokens;  
+* Automatic creation of missing tables in the database;  
+* Refreshing a pair of tokens using a refresh token.  
 
-# 🚀 What need to start?
-- Ktor  
-- Exposed  
-- Jackson  
-- Database (PostgreSQL)  
-- BCrypt  
+## Dependencies
+* [Kotlin](https://github.com/JetBrains/kotlin) `1.5.21`
+* [Ktor server](https://github.com/ktorio/ktor) `1.6.2`
+* [Exposed](https://github.com/JetBrains/Exposed) `0.32.1`
+* [Logback](https://github.com/qos-ch/logback) `1.2.5`
+* [SQLite JDBC Driver](https://github.com/xerial/sqlite-jdbc) `0.36.0`
+* [Bcrypt](https://github.com/ToxicBakery/bcrypt-mpp) `1.0.9`
+* [Konform](https://github.com/konform-kt/konform) `0.3.0`
+* [ShadowJar](https://github.com/johnrengelman/shadow) `6.1.0`
 
-1. Clone repository: 
-`git clone https://github.com/Slenkis/ktor-full-jwt.git`
-
-2. Create 2 tables in the database: **refresh_tokens** & **users**  
-![Tables](https://imgur.com/2SRHjyr.jpg)
-
-3. Change credentials for connecting to database in [application.conf](resources/application.conf)
-
-4. Run project: 
-`./gradlew run`
-
-# 🍒 Usage
-1. Send login request to `/api/login` with **email** and **password** in body.
-
-2. Send a request to `/users` with the **access** token in the *Authorization* header.
-
-3. When the **access** token lifetime expires, you need to get a new pair by sending a request to `/api/auth/refresh`, in the body of which specify the current **refresh** token.
-
-# ✨ API
-
-## 🔑 Login
-Used to collect tokens for a registered user.
-
-**URL** : `/api/login/`  
-
-**Method** : `POST`  
-
-**Data example** :
-```json
-{
-    "email": "bob@gmail.com",
-    "password": "qwerty123"
-}
+## Running
+Clone the repository:
+```
+$ git clone https://github.com/Slenkis/ktor-full-jwt.git
 ```
 
-### Success response
-**Code** : `200 OK`
-
-**Content example** :
-```json
-{
-    "accessToken": "XXXXXX.YYYYYY.ZZZZZZ",
-    "refreshToken": "d19e6fcd-ee18-4b38-acae-d1f7b9109118"
-}
+Navigate to the repository folder:
 ```
-### Error response
-
-**Code** : `401 Unauthorized`
-
-**Condition** : If 'email' and 'password' combination is wrong.
-
-## 🔁 Refresh
-**URL** : `/api/refresh/`  
-
-**Method** : `POST`
-
-**Data example** :
-```json
-{
-    "refreshToken": "d19e6fcd-ee18-4b38-acae-d1f7b9109118"
-}
+$ cd ktor-full-jwt
 ```
 
-### Success response
-**Code** : `200 OK`
-
-**Content example** :
-```json
-{
-    "accessToken": "KKKKKK.NNNNNN.DDDDDD",
-    "refreshToken": "b1349089-8f71-464f-a0fa-f2675252693e"
-}
+Run application:
+```
+$ ./gradlew run
 ```
 
-### Error response
+## Documentation
+| Method | Endpoint            | Wiki page                                                       |
+| :----: | ------------------- | --------------------------------------------------------------- |
+| POST   | `/api/registration` | [User registration](../../wiki/Endpoints#user-registration)     |
+| POST   | `/api/login`        | [User authentication](../../wiki/Endpoints#user-authentication) |
+| POST   | `/api/refresh`      | [Refresh token](../../wiki/Endpoints#refresh-token)             |
+| GET    | `/users/me`         | [Get user info](../../wiki/Endpoints#get-user-info)             |
 
-**Code** : `400 Bad Request`
+### Read about configuration, table schemes and more in [Wiki](../../wiki/Home)
 
-**Condition** : If the refresh token is invalid or expired.
-
-**Content example** :
-```json
-{
-    "description": "invalid token"
-}
-```
-
-## 👥 Get users
-Get all users from the database 'users'
-
-**URL** : `/users/`  
-
-**Method** : `GET`
-
-**Auth required** : `Yes, in header`
-
-### Success response
-**Code** : `200 OK`
-
-**Content example** :
-```json
-[    
-    {
-        "id": 1,
-        "email": "bob@gmail.com",
-        "password": "$2y$08$W62OarwjrPeu1n23FgEXhev2ZncUWMNwD5hF3QZ195PGZB1HkD3Zu",
-        "active": true
-    },
-    {
-        "id": 2,
-        "email": "alice@yahoo.com",
-        "password": "$2y$08$1eSVekbH33kkkUWMhfJC4uJV21oWxsZMPssojXJo6O0TyS5p9kIFG",
-        "active": false
-    }
-]
-```
-
-### Error response
-
-**Code** : `401 Unauthorized`
-
-**Condition** : If the access token is invalid or expired.
-
-# 🤝 Contributing
+## Contributing
 Pull requests are welcome. For major changes, please open an [issue](../../issues) first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
 
-# 📝 License
+## License
 Project is licensing under [Apache-2.0](LICENSE)
